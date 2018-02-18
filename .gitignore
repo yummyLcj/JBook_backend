@@ -1,5 +1,5 @@
 # DB
-src/mysql.js*
+config.js*
 
 # Logs
 logs
