@@ -13,8 +13,7 @@ const files = fs.readdirSync(`${__dirname}/models`);
 let jsFiles = files.filter(f => f.endsWith('.js'), files);
 
 module.exports = {};
-
-for (let i = jsFiles.length; jsFiles--;) {
+for (let i = jsFiles.length; i--;) {
     const f = jsFiles[i];
     const name = f.substring(0, f.length - 3);
     module.exports[name] = require(`${__dirname}/models/${f}`);

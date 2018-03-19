@@ -9,7 +9,11 @@ const db = require('../db');
 
 module.exports = db.defineModel('users', {
     id: {
-        type: db.STRING(100),
+        type: db.STRING(16),
+        unique: false
+    },
+    unionId: {
+        type: db.STRING(32),
         unique: false
     }
 });

@@ -12,7 +12,6 @@ const router = new Router();
 
 module.exports = router
     .get('/', (ctx) => {
-        // ctx.router available
         ctx.body = 'router';
     })
     .get('/hello', (ctx) => {
