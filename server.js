@@ -11,9 +11,9 @@ const model = require('./src/model.js');
 
 const PORT = 3000;
 const app = new Koa();
+model.sync(); // 更新数据库，正式环境删除
 app.use(async (ctx, next) => {
     ctx.model = model;
-    // modal.sync(); // 更新数据库
     next();
 }).use(router.routes()).use(router.allowedMethods());
 app.listen(PORT);
