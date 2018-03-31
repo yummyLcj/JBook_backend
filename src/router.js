@@ -7,13 +7,11 @@
  */
 
 const Router = require('koa-router');
+const sessionRouter = require('./router/session');
+const userRouter = require('./router/user');
 
 const router = new Router();
 
 module.exports = router
-    .get('/', (ctx) => {
-        ctx.body = 'router';
-    })
-    .get('/hello', (ctx) => {
-        ctx.body = 'hellow';
-    });
+    .use('', sessionRouter.routes())
+    .use('', userRouter.routes());

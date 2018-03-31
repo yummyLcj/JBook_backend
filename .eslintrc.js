@@ -9,6 +9,6 @@ module.exports = {
         'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }]
     },
     "globals": {
-        "next": false
+        "mount": false
     }
 };

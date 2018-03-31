@@ -6,15 +6,16 @@
  * @Last modified time: 2018-03-04T11:10:49+08:00
  */
 const Koa = require('koa');
+const koaBody = require('koa-body');
 const router = require('./src/router.js');
 const model = require('./src/model.js');
 
 const PORT = 3000;
 const app = new Koa();
-model.sync(); // 更新数据库，正式环境删除
-app.use(async (ctx, next) => {
+// model.sync(); // 更新数据库，正式环境删除
+app.use(koaBody()).use(async (ctx, next) => {
     ctx.model = model;
-    next();
+    await next();
 }).use(router.routes()).use(router.allowedMethods());
 app.listen(PORT);
 
