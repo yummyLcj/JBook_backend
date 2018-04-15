@@ -10,20 +10,20 @@ const uuid = require('node-uuid');
 const config = require('../config');
 
 function generateId() {
-    return uuid.v4();
+    return uuid.v4().toString(16).slice(0, 12);
 }
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
-    dialect: config.dialect,
+    dialect: config.dialect || 'mysql',
     pool: {
         max: 5,
         min: 0,
-        idle: 10000
-    }
+        idle: 10000,
+    },
 });
 
-const ID_TYPE = Sequelize.STRING(16);
+const ID_TYPE = Sequelize.STRING(32);
 
 function defineModel(name, attributes) {
     const attrs = {};
@@ -35,25 +35,25 @@ function defineModel(name, attributes) {
         } else {
             attrs[key] = {
                 type: value,
-                allowNull: false
+                allowNull: false,
             };
         }
     });
     attrs.id = {
         type: ID_TYPE,
-        primaryKey: true
+        primaryKey: true,
     };
     attrs.createdAt = {
         type: Sequelize.BIGINT,
-        allowNull: false
+        allowNull: false,
     };
     attrs.updatedAt = {
         type: Sequelize.BIGINT,
-        allowNull: false
+        allowNull: false,
     };
     attrs.version = {
         type: Sequelize.BIGINT,
-        allowNull: false
+        allowNull: false,
     };
     return sequelize.define(name, attrs, {
         tableName: name,

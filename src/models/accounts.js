@@ -7,21 +7,29 @@
  */
 const db = require('../db');
 const users = require('./users.js');
+const userToaccount = require('./userToAccount.js');
 
-module.exports = db.defineModel('account', {
+module.exports = db.defineModel('accounts', {
     id: {
         type: db.STRING(16),
-        unique: false
+        unique: false,
     },
     uid: {
-        type: db.STRING(16),
+        type: db.STRING(32),
         references: {
             model: users,
-            key: 'id'
-        }
+            key: 'id',
+        },
+    },
+    aid: {
+        type: db.STRING(16),
+        references: {
+            model: userToaccount,
+            key: 'id',
+        },
     },
     amount: {
         type: db.INTEGER,
-        unique: true
-    }
+        unique: true,
+    },
 });

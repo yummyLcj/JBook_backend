@@ -9,12 +9,24 @@ const Koa = require('koa');
 const koaBody = require('koa-body');
 const router = require('./src/router.js');
 const model = require('./src/model.js');
+const {
+    getParams,
+    go,
+    goSuccess,
+    goError,
+} = require('./src/tools/middleware.js');
 
 const PORT = 3000;
 const app = new Koa();
 // model.sync(); // 更新数据库，正式环境删除
-app.use(koaBody()).use(async (ctx, next) => {
+app.use(koaBody({
+    multipart: true,
+})).use(async (ctx, next) => {
     ctx.model = model;
+    ctx.getParams = getParams.bind(ctx);
+    ctx.go = go.bind(ctx);
+    ctx.goSuccess = goSuccess.bind(ctx);
+    ctx.goError = goError.bind(ctx);
     await next();
 }).use(router.routes()).use(router.allowedMethods());
 app.listen(PORT);

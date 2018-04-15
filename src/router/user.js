@@ -1,10 +1,11 @@
 // base on /user
+// 不用unionCode暂时不需要这个路由
 const Router = require('koa-router');
 const config = require('../../config');
 const WXBizDataCrypt = require('../tools/WXBizDataCrypt');
 
 const router = new Router({
-    prefix: '/user'
+    prefix: '/user',
 });
 module.exports = router
     .post('/', (ctx) => {

@@ -1,14 +1,14 @@
 module.exports = {
     "extends": "airbnb",
     "plugins": [
-        "react"
+        "react",
     ],
     "rules": {
         "indent": ["error", 4],
-        'comma-dangle': [2, 'never'],
-        'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }]
+        'no-plusplus': ["error", { "allowForLoopAfterthoughts": true }],
+        "func-names": ["error", "as-needed"],
     },
     "globals": {
-        "mount": false
+        "mount": false,
     }
 };

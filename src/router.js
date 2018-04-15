@@ -9,9 +9,11 @@
 const Router = require('koa-router');
 const sessionRouter = require('./router/session');
 const userRouter = require('./router/user');
+const accountsRouter = require('./router/accounts');
 
 const router = new Router();
 
 module.exports = router
     .use('', sessionRouter.routes())
-    .use('', userRouter.routes());
+    .use('', userRouter.routes())
+    .use('', accountsRouter.routes());
