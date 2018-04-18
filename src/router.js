@@ -10,10 +10,16 @@ const Router = require('koa-router');
 const sessionRouter = require('./router/session');
 const userRouter = require('./router/user');
 const accountsRouter = require('./router/accounts');
+const accountRouter = require('./router/account');
+const recordsRouter = require('./router/records');
+const recordRouter = require('./router/record');
 
 const router = new Router();
 
 module.exports = router
     .use('', sessionRouter.routes())
     .use('', userRouter.routes())
-    .use('', accountsRouter.routes());
+    .use('', accountsRouter.routes())
+    .use('', accountRouter.routes())
+    .use('', recordsRouter.routes())
+    .use('', recordRouter.routes());

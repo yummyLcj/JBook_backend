@@ -24,5 +24,8 @@ module.exports = db.defineModel('accounts', {
         type: db.STRING(16),
         unique: true,
     },
-    type: db.FLOAT,
+    type: {
+        type: db.FLOAT,
+        allowNull: true,
+    },
 });

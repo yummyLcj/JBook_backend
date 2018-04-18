@@ -1,10 +1,11 @@
 const isFieldNotExist = function (data = [], mustExistField = []) {
-    let isNotExist = false;
+    const emptyKey = [];
     mustExistField.forEach((field) => {
-        isNotExist = isNotExist ? true : !data[field];
-        return isNotExist;
+        if (!data[field]) {
+            emptyKey.push(field);
+        }
     });
-    return isNotExist;
+    return emptyKey;
 };
 
 // this指针绑定为ctx
@@ -37,20 +38,24 @@ const goError = function (content = {}) {
 const getParams = function (mustExistField = []) {
     const ctx = this;
     let params = {};
-    switch (ctx.method) {
+    switch (ctx.method.toLowerCase()) {
     case 'get':
         params = ctx.query;
         break;
     case 'post':
         params = ctx.request.body;
         break;
+    case 'put':
+        params = ctx.request.body;
+        break;
     default:
         params = {};
     }
-    params = Object.assign(params, ctx.params);
-    if (mustExistField.length && isFieldNotExist(params, mustExistField)) {
+    Object.assign(params, ctx.params);
+    const emptyKeys = isFieldNotExist(params, mustExistField);
+    if (emptyKeys.length) {
         goError.call(this, {
-            content: '参数错误！不可为空！',
+            content: `参数${JSON.stringify(emptyKeys)}错误！不可为空！`,
         });
         return false;
     }

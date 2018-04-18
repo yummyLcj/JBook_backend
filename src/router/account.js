@@ -24,7 +24,7 @@ module.exports = router
             uid,
             accountName,
             type,
-        } = ctx.getParams(['uid, accountName']);
+        } = ctx.getParams(['uid', 'accountName']);
         ctx.model.accounts.create({
             uid,
             accountName,

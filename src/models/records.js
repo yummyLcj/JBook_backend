@@ -9,7 +9,7 @@ const db = require('../db');
 const users = require('./users.js');
 const accounts = require('./accounts.js');
 
-module.exports = db.defineModel('accounts', {
+module.exports = db.defineModel('records', {
     id: {
         type: db.STRING(16),
         unique: false,
@@ -35,10 +35,13 @@ module.exports = db.defineModel('accounts', {
             key: 'id',
         },
     },
-    amount: {
-        type: db.FLOAT,
-        unique: true,
+    amount: db.FLOAT,
+    type: {
+        type: db.INTEGER,
+        allowNull: true,
     },
-    type: db.INTEGER,
-    note: db.STRING,
+    note: {
+        type: db.STRING,
+        allowNull: true,
+    },
 });

@@ -6,7 +6,7 @@ const router = new Router({
 });
 module.exports = router
     // 获取记录具体信息
-    .get('/:aid', async (ctx, next) => {
+    .get('/:rid', async (ctx, next) => {
         const { rid } = ctx.getParams(['rid']);
         const accountsList = await ctx.model.records.findAll({
             where: {
@@ -19,30 +19,29 @@ module.exports = router
         await next();
     })
     // 创建一条记录
-    .post('/:uid', async (ctx, next) => {
+    .post('/:aid', async (ctx, next) => {
         const {
-            rid,
             aid,
             uid,
             amount,
             type,
             note,
-        } = ctx.getParams(['rid, aid, uid, amount']);
-        ctx.model.records.create({
-            id: rid,
+        } = ctx.getParams(['aid', 'uid', 'amount']);
+        const record = await ctx.model.records.create({
             aid,
             createrId: uid,
+            editerId: uid,
             type,
             amount,
             note,
         });
         ctx.goSuccess({
-            data: 'success',
+            data: record,
         });
         await next();
     })
     // 修改一条记录
-    .post('/:uid', async (ctx, next) => {
+    .put('/:rid', async (ctx, next) => {
         const {
             rid,
             aid,
@@ -50,14 +49,17 @@ module.exports = router
             amount,
             type,
             note,
-        } = ctx.getParams(['rid, uid, aid, amount']);
-        ctx.model.records.create({
-            id: rid,
+        } = ctx.getParams(['rid', 'uid', 'aid', 'amount']);
+        ctx.model.records.update({
             aid,
             editerId: uid,
             type,
             amount,
             note,
+        }, {
+            where: {
+                id: rid,
+            },
         });
         ctx.goSuccess({
             data: 'success',
@@ -65,7 +67,7 @@ module.exports = router
         await next();
     })
     // 删除一条记录
-    .del('/:uid/:aid', async (ctx, next) => {
+    .del('/:aid/:rid', async (ctx, next) => {
         const {
             rid,
             aid,
