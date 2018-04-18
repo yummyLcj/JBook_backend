@@ -34,7 +34,7 @@ const goError = function (content = {}) {
 };
 
 // 获取传递的参数
-const getParams = async function (mustExistField = []) {
+const getParams = function (mustExistField = []) {
     const ctx = this;
     let params = {};
     switch (ctx.method) {
