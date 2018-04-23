@@ -10,6 +10,6 @@ const db = require('../db');
 module.exports = db.defineModel('users', {
     id: {
         type: db.STRING(32),
-        unique: false,
+        unique: true,
     },
 });

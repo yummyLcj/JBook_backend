@@ -18,7 +18,10 @@ const {
 
 const PORT = 3000;
 const app = new Koa();
-// model.sync(); // 更新数据库，正式环境删除
+const env = process.env.NODE_ENV;
+if (env === 'refreshSql') {
+    model.sync(); // 更新数据库，正式环境删除
+}
 app.use(koaBody({
     multipart: true,
 })).use(async (ctx, next) => {

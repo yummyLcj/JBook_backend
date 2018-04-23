@@ -13,6 +13,20 @@ module.exports = router
                 uid,
             },
         });
+        if (accountsList.length === 0) {
+            let account = await ctx.model.accounts.create({
+                createrId: uid,
+                accountName: '默认账单',
+                type: 1,
+            });
+            account = await ctx.model.userToAccount.create({
+                aid: account.id,
+                uid,
+                accountName: account.accountName,
+                isDefault: true,
+            });
+            accountsList.push(account);
+        }
         ctx.goSuccess({
             data: accountsList,
         });

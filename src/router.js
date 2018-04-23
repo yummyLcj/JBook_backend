@@ -7,19 +7,15 @@
  */
 
 const Router = require('koa-router');
-const sessionRouter = require('./router/session');
-const userRouter = require('./router/user');
-const accountsRouter = require('./router/accounts');
-const accountRouter = require('./router/account');
-const recordsRouter = require('./router/records');
-const recordRouter = require('./router/record');
+const fs = require('fs');
 
 const router = new Router();
+const files = fs.readdirSync(`${__dirname}/router`);
+const jsFiles = files.filter(f => f.endsWith('.js'), files);
 
-module.exports = router
-    .use('', sessionRouter.routes())
-    .use('', userRouter.routes())
-    .use('', accountsRouter.routes())
-    .use('', accountRouter.routes())
-    .use('', recordsRouter.routes())
-    .use('', recordRouter.routes());
+for (let i = jsFiles.length; i--;) {
+    const f = jsFiles[i];
+    router.use('', require(`${__dirname}/router/${f}`).routes());
+}
+
+module.exports = router;

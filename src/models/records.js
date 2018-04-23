@@ -12,7 +12,7 @@ const accounts = require('./accounts.js');
 module.exports = db.defineModel('records', {
     id: {
         type: db.STRING(16),
-        unique: false,
+        unique: true,
     },
     aid: {
         type: db.STRING(16),
@@ -36,6 +36,10 @@ module.exports = db.defineModel('records', {
         },
     },
     amount: db.FLOAT,
+    balanceType: {
+        type: db.INTEGER,
+        allowNull: true,
+    },
     type: {
         type: db.INTEGER,
         allowNull: true,

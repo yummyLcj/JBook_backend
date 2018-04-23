@@ -7,13 +7,21 @@
  */
 const db = require('../db');
 const users = require('./users.js');
+const accounts = require('./accounts.js');
 
-module.exports = db.defineModel('accounts', {
+module.exports = db.defineModel('userToAccount', {
     id: {
         type: db.STRING(16),
         unique: true,
     },
-    createrId: {
+    aid: {
+        type: db.STRING(16),
+        ureferences: {
+            model: accounts,
+            key: 'id',
+        },
+    },
+    uid: {
         type: db.STRING(32),
         references: {
             model: users,
@@ -22,10 +30,11 @@ module.exports = db.defineModel('accounts', {
     },
     accountName: {
         type: db.STRING(16),
-        unique: true,
+        unique: false,
     },
-    type: {
-        type: db.FLOAT,
-        allowNull: true,
+    isDefault: {
+        type: db.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
     },
 });

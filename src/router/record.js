@@ -24,6 +24,7 @@ module.exports = router
             aid,
             uid,
             amount,
+            balanceType,
             type,
             note,
         } = ctx.getParams(['aid', 'uid', 'amount']);
@@ -31,6 +32,7 @@ module.exports = router
             aid,
             createrId: uid,
             editerId: uid,
+            balanceType,
             type,
             amount,
             note,
@@ -47,12 +49,14 @@ module.exports = router
             aid,
             uid,
             amount,
+            balanceType,
             type,
             note,
         } = ctx.getParams(['rid', 'uid', 'aid', 'amount']);
         ctx.model.records.update({
             aid,
             editerId: uid,
+            balanceType,
             type,
             amount,
             note,
