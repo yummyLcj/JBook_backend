@@ -15,7 +15,7 @@ module.exports = router
         const uid = loginInf.openid;
         await ctx.model.users.findOrCreate({
             where: {
-                id: uid,
+                uid,
             },
         });
         ctx.body = JSON.stringify({

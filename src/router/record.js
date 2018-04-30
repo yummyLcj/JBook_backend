@@ -10,7 +10,7 @@ module.exports = router
         const { rid } = ctx.getParams(['rid']);
         const accountsList = await ctx.model.records.findAll({
             where: {
-                id: rid,
+                rid,
             },
         });
         ctx.goSuccess({

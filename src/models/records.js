@@ -10,9 +10,11 @@ const users = require('./users.js');
 const accounts = require('./accounts.js');
 
 module.exports = db.defineModel('records', {
-    id: {
+    id: db.STRING(16),
+    rid: {
         type: db.STRING(16),
         unique: true,
+        primaryKey: true,
     },
     aid: {
         type: db.STRING(16),
@@ -35,17 +37,23 @@ module.exports = db.defineModel('records', {
             key: 'id',
         },
     },
-    amount: db.FLOAT,
+    amount: {
+        type: db.FLOAT,
+        allowNull: false,
+        defaultValue: 0,
+    },
+    // 0 收入 1 支出
     balanceType: {
         type: db.INTEGER,
-        allowNull: true,
+        allowNull: false,
     },
     type: {
         type: db.INTEGER,
-        allowNull: true,
+        allowNull: false,
     },
     note: {
         type: db.STRING,
         allowNull: true,
+        defaultValue: '',
     },
 });

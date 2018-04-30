@@ -8,8 +8,10 @@
 const db = require('../db');
 
 module.exports = db.defineModel('users', {
-    id: {
+    id: db.STRING(16),
+    uid: {
         type: db.STRING(32),
         unique: true,
+        primaryKey: true,
     },
 });

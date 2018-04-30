@@ -10,22 +10,19 @@ const users = require('./users.js');
 const accounts = require('./accounts.js');
 
 module.exports = db.defineModel('userToAccount', {
-    id: {
-        type: db.STRING(16),
-        unique: true,
-    },
+    id: db.STRING(16),
     aid: {
         type: db.STRING(16),
         ureferences: {
             model: accounts,
-            key: 'id',
+            key: 'aid',
         },
     },
     uid: {
         type: db.STRING(32),
         references: {
             model: users,
-            key: 'id',
+            key: 'uid',
         },
     },
     accountName: {
@@ -36,5 +33,11 @@ module.exports = db.defineModel('userToAccount', {
         type: db.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+    },
+    // 0 - 拥有者 1 - 管理员 2 - 可写 3 - 可读
+    access: {
+        type: db.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
     },
 });
