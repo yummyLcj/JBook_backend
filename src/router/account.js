@@ -20,6 +20,8 @@ const getAccountDetail = async function (ctx, aid, uid) {
             uid,
         },
     });
+    accountDetail.dataValues.isDefault = userToAccount.isDefault;
+    accountDetail.dataValues.access = userToAccount.access;
     accountDetail.isDefault = userToAccount.isDefault;
     accountDetail.access = userToAccount.access;
     return accountDetail;
@@ -31,7 +33,10 @@ module.exports = router
         const {
             aid,
             uid,
-        } = ctx.getParams(['aid, uid']);
+        } = ctx.getParams(['aid', 'uid']);
+        if (!aid || !uid) {
+            return;
+        }
         const accountDetail = await getAccountDetail(ctx, aid, uid);
         ctx.goSuccess({
             data: accountDetail,
@@ -44,21 +49,25 @@ module.exports = router
             uid,
             accountName,
             type,
-        } = ctx.getParams(['uid', 'accountName']);
+        } = ctx.getParams(['uid', 'accountName', 'type']);
+        if (!uid) {
+            return;
+        }
         const accountDetail = await ctx.model.accounts.create({
+            aid: ctx.makeId(uid),
             createrId: uid,
             accountName,
             type,
         });
         await ctx.model.userToAccount.create({
-            aid: accountDetail.id,
+            aid: accountDetail.aid,
             uid,
             accountName,
             isDefault: false,
             access: 0,
         });
-        accountDetail.isDefault = false;
-        accountDetail.access = 0;
+        accountDetail.dataValues.isDefault = false;
+        accountDetail.dataValues.access = 0;
         ctx.goSuccess({
             data: accountDetail,
         });
@@ -73,7 +82,10 @@ module.exports = router
             type,
             isDefault = false,
             access = 0,
-        } = ctx.getParams(['uid', 'accountName']);
+        } = ctx.getParams(['uid', 'aid']);
+        if (!aid || !uid) {
+            return;
+        }
         const originAccountDetail = await getAccountDetail(ctx, aid, uid);
         // 仅为可读权限
         if (originAccountDetail.access === 3) {
@@ -83,27 +95,32 @@ module.exports = router
             await next();
             return;
         }
-        const accountDetail = await ctx.model.accounts.upsert({
+        await ctx.model.accounts.update({
             createrId: uid,
             accountName: accountName || originAccountDetail.accountName,
             type: type || originAccountDetail.type,
+        }, {
+            where: {
+                aid,
+            },
         });
-        await ctx.model.userToAccount.upsert({
-            aid: accountDetail.id,
+        await ctx.model.userToAccount.update({
             uid,
             accountName: accountName || originAccountDetail.accountName,
             isDefault: isDefault || originAccountDetail.isDefault,
             access: access || originAccountDetail.access,
+        }, {
+            where: {
+                aid,
+            },
         });
-        accountDetail.isDefault = false;
-        accountDetail.access = 0;
         ctx.goSuccess({
-            data: accountDetail,
+            data: 'success',
         });
         await next();
     })
     // 删除一本账单
-    .del('/:aid', async (ctx, next) => {
+    .del('/:uid/:aid', async (ctx, next) => {
         const {
             uid,
             aid,
@@ -119,7 +136,6 @@ module.exports = router
         }
         await ctx.model.accounts.destroy({
             where: {
-                uid,
                 id: aid,
             },
         });

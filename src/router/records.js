@@ -10,12 +10,18 @@ module.exports = router
         const {
             aid,
             uid,
-        } = ctx.getParams(['aid']);
-        const canWrite = await ctx.modal.userToAccount.findOne({
-            aid,
-            uid,
+        } = ctx.getParams(['aid', 'uid']);
+        const {
+            limit = 10,
+            page = 1,
+        } = ctx.getParams();
+        const canWrite = await ctx.model.userToAccount.findOne({
+            where: {
+                uid,
+                aid,
+            },
         });
-        if (!canWrite.length) {
+        if (!canWrite) {
             ctx.goError({
                 message: '无权限！',
             });
@@ -23,12 +29,18 @@ module.exports = router
             return;
         }
         const recordsList = await ctx.model.records.findAll({
+            offset: (page - 1) * limit,
+            limit: +limit,
             where: {
                 aid,
             },
         });
         ctx.goSuccess({
-            data: recordsList,
+            data: {
+                length: recordsList.length,
+                page,
+                data: recordsList,
+            },
         });
         await next();
     });

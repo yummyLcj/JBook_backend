@@ -20,21 +20,21 @@ module.exports = db.defineModel('records', {
         type: db.STRING(16),
         references: {
             model: accounts,
-            key: 'id',
+            key: 'aid',
         },
     },
     createrId: {
         type: db.STRING(32),
         references: {
             model: users,
-            key: 'id',
+            key: 'uid',
         },
     },
     editerId: {
         type: db.STRING(32),
         references: {
             model: users,
-            key: 'id',
+            key: 'uid',
         },
     },
     amount: {

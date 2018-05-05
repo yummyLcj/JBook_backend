@@ -14,6 +14,7 @@ const {
     go,
     goSuccess,
     goError,
+    makeId,
 } = require('./src/tools/middleware.js');
 
 const PORT = 3000;
@@ -30,6 +31,7 @@ app.use(koaBody({
     ctx.go = go.bind(ctx);
     ctx.goSuccess = goSuccess.bind(ctx);
     ctx.goError = goError.bind(ctx);
+    ctx.makeId = makeId;
     await next();
 }).use(router.routes()).use(router.allowedMethods());
 app.listen(PORT);

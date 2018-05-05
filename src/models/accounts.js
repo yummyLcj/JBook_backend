@@ -24,7 +24,7 @@ module.exports = db.defineModel('accounts', {
     },
     accountName: {
         type: db.STRING(16),
-        unique: true,
+        allowNull: false,
     },
     // 0 - 普通 1 - AA
     type: {

@@ -29,6 +29,7 @@ module.exports = router
             note,
         } = ctx.getParams(['aid', 'uid', 'amount']);
         const record = await ctx.model.records.create({
+            rid: ctx.makeId(aid),
             aid,
             createrId: uid,
             editerId: uid,
@@ -62,7 +63,7 @@ module.exports = router
             note,
         }, {
             where: {
-                id: rid,
+                rid,
             },
         });
         ctx.goSuccess({

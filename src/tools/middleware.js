@@ -48,6 +48,9 @@ const getParams = function (mustExistField = []) {
     case 'put':
         params = ctx.request.body;
         break;
+    case 'delete':
+        params = ctx.request.body;
+        break;
     default:
         params = {};
     }
@@ -62,9 +65,14 @@ const getParams = function (mustExistField = []) {
     return params;
 };
 
+const makeId = function (baseId = '') {
+    return `${Math.floor((+new Date()) * Math.random())}${baseId}`.toString(16).slice(0, 8);
+};
+
 module.exports = {
     go,
     goSuccess,
     goError,
     getParams,
+    makeId,
 };
