@@ -14,17 +14,11 @@ module.exports = router
             },
         });
         if (accountsList.length === 0) {
-            let account = await ctx.model.accounts.create({
+            const account = await ctx.model.accounts.create({
                 aid: ctx.makeId(uid),
                 createrId: uid,
                 accountName: '默认账单',
                 type: 1,
-            });
-            account = await ctx.model.userToAccount.create({
-                aid: account.aid,
-                uid,
-                isDefault: true,
-                access: 0,
             });
             accountsList.push(account);
         }

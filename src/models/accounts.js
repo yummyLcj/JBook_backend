@@ -8,19 +8,12 @@
 const db = require('../db');
 const users = require('./users.js');
 
-module.exports = db.defineModel('accounts', {
+const accounts = db.defineModel('accounts', {
     id: db.STRING(16),
     aid: {
         type: db.STRING(16),
         unique: true,
         primaryKey: true,
-    },
-    createrId: {
-        type: db.STRING(32),
-        references: {
-            model: users,
-            key: 'id',
-        },
     },
     accountName: {
         type: db.STRING(16),
@@ -32,3 +25,20 @@ module.exports = db.defineModel('accounts', {
         allowNull: true,
     },
 });
+
+users.hasMany(accounts, {
+    foreignKey: 'createrId',
+    targetKey: 'uid',
+});
+
+accounts.addHook('afterCreate', (account) => {
+    const userToAccount = require('./userToAccount.js');
+    userToAccount.create({
+        aid: account.aid,
+        uid: account.createrId,
+        isDefault: false,
+        access: 0,
+    });
+});
+
+module.exports = accounts;

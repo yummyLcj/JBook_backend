@@ -8,34 +8,14 @@
 const db = require('../db');
 const users = require('./users.js');
 const accounts = require('./accounts.js');
+const types = require('./types.js');
 
-module.exports = db.defineModel('records', {
+const records = db.defineModel('records', {
     id: db.STRING(16),
     rid: {
         type: db.STRING(16),
         unique: true,
         primaryKey: true,
-    },
-    aid: {
-        type: db.STRING(16),
-        references: {
-            model: accounts,
-            key: 'aid',
-        },
-    },
-    createrId: {
-        type: db.STRING(32),
-        references: {
-            model: users,
-            key: 'uid',
-        },
-    },
-    editerId: {
-        type: db.STRING(32),
-        references: {
-            model: users,
-            key: 'uid',
-        },
     },
     amount: {
         type: db.FLOAT,
@@ -47,7 +27,7 @@ module.exports = db.defineModel('records', {
         type: db.INTEGER,
         allowNull: false,
     },
-    type: {
+    tid: {
         type: db.INTEGER,
         allowNull: false,
     },
@@ -57,3 +37,25 @@ module.exports = db.defineModel('records', {
         defaultValue: '',
     },
 });
+
+records.belongsTo(types, {
+    foreignKey: 'tid',
+    targetKey: 'tid',
+});
+
+users.hasMany(records, {
+    foreignKey: 'createrId',
+    targetKey: 'uid',
+});
+
+users.hasMany(records, {
+    foreignKey: 'editerId',
+    targetKey: 'uid',
+});
+
+accounts.hasMany(records, {
+    foreignKey: 'aid',
+    targetKey: 'aid',
+});
+
+module.exports = records;

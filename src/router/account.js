@@ -59,13 +59,6 @@ module.exports = router
             accountName,
             type,
         });
-        await ctx.model.userToAccount.create({
-            aid: accountDetail.aid,
-            uid,
-            accountName,
-            isDefault: false,
-            access: 0,
-        });
         accountDetail.dataValues.isDefault = false;
         accountDetail.dataValues.access = 0;
         ctx.goSuccess({

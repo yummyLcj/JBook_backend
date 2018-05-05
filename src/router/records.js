@@ -6,7 +6,7 @@ const router = new Router({
 });
 module.exports = router
     // 获取全部账单列表
-    .get('/:aid', async (ctx, next) => {
+    .get('/:uid/:aid', async (ctx, next) => {
         const {
             aid,
             uid,
@@ -34,6 +34,11 @@ module.exports = router
             where: {
                 aid,
             },
+            include: [
+                {
+                    model: ctx.model.types,
+                },
+            ],
         });
         ctx.goSuccess({
             data: {

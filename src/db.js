@@ -50,6 +50,7 @@ function defineModel(name, attributes) {
     attrs.updatedAt = {
         type: Sequelize.BIGINT,
         allowNull: false,
+        defaultValue: Date.now(),
     };
     attrs.version = {
         type: Sequelize.BIGINT,
@@ -83,11 +84,10 @@ const exp = {
     defineModel,
     sync: () => {
         if (process.env.NODE_ENV !== 'production') {
-            sequelize.sync({ force: true });
-        } else {
-            throw new Error('Cannot sync() when NODE_ENV is set to \'production\'.');
+            return sequelize.sync({ force: true });
         }
-    }
+        throw new Error('Cannot sync() when NODE_ENV is set to \'production\'.');
+    },
 };
 
 TYPES.forEach((type) => {

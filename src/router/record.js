@@ -12,6 +12,11 @@ module.exports = router
             where: {
                 rid,
             },
+            include: [
+                {
+                    model: ctx.model.types,
+                },
+            ],
         });
         ctx.goSuccess({
             data: accountsList,
@@ -25,7 +30,7 @@ module.exports = router
             uid,
             amount,
             balanceType,
-            type,
+            tid,
             note,
         } = ctx.getParams(['aid', 'uid', 'amount']);
         const record = await ctx.model.records.create({
@@ -34,7 +39,7 @@ module.exports = router
             createrId: uid,
             editerId: uid,
             balanceType,
-            type,
+            tid,
             amount,
             note,
         });
@@ -51,14 +56,14 @@ module.exports = router
             uid,
             amount,
             balanceType,
-            type,
+            tid,
             note,
         } = ctx.getParams(['rid', 'uid', 'aid', 'amount']);
         ctx.model.records.update({
             aid,
             editerId: uid,
             balanceType,
-            type,
+            tid,
             amount,
             note,
         }, {

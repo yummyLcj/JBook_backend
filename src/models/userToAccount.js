@@ -9,26 +9,8 @@ const db = require('../db');
 const users = require('./users.js');
 const accounts = require('./accounts.js');
 
-module.exports = db.defineModel('userToAccount', {
+const userToAccount = db.defineModel('userToAccount', {
     id: db.STRING(16),
-    aid: {
-        type: db.STRING(16),
-        ureferences: {
-            model: accounts,
-            key: 'aid',
-        },
-    },
-    uid: {
-        type: db.STRING(32),
-        references: {
-            model: users,
-            key: 'uid',
-        },
-    },
-    accountName: {
-        type: db.STRING(16),
-        unique: false,
-    },
     isDefault: {
         type: db.BOOLEAN,
         allowNull: false,
@@ -40,4 +22,20 @@ module.exports = db.defineModel('userToAccount', {
         allowNull: false,
         defaultValue: 0,
     },
+    source: {
+        type: db.STRING,
+        allowNull: true,
+    },
 });
+
+userToAccount.belongsTo(accounts, {
+    foreignKey: 'aid',
+    targetKey: 'aid',
+});
+
+users.hasMany(userToAccount, {
+    foreignKey: 'uid',
+    targetKey: 'uid',
+});
+
+module.exports = userToAccount;

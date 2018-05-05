@@ -21,7 +21,37 @@ const PORT = 3000;
 const app = new Koa();
 const env = process.env.NODE_ENV;
 if (env === 'refreshSql') {
-    model.sync(); // 更新数据库，正式环境删除
+    // 更新数据库，正式环境删除
+    model
+        .sync()
+        .then(async () => {
+            await model.users.create({
+                uid: 1,
+            });
+            const account = await model.accounts.create({
+                aid: makeId(1),
+                createrId: 1,
+                accountName: 'test',
+                type: 0,
+            });
+            for (let i = 0; i < 10; i++) {
+                model.records.create({
+                    rid: makeId(account.aid),
+                    aid: account.aid,
+                    createrId: 1,
+                    editerId: 1,
+                    balanceType: 0,
+                    tid: 1,
+                    amount: 0,
+                    note: 'this is test',
+                });
+            }
+            await model.types.create({
+                tid: 1,
+                createrId: 1,
+                name: 'test',
+            });
+        });
 }
 app.use(koaBody({
     multipart: true,

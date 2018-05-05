@@ -19,6 +19,4 @@ for (let i = jsFiles.length; i--;) {
     module.exports[name] = require(`${__dirname}/models/${f}`);
 }
 
-module.exports.sync = () => {
-    db.sync();
-};
+module.exports.sync = () => db.sync();
