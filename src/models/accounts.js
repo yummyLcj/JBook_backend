@@ -36,7 +36,7 @@ accounts.addHook('afterCreate', (account) => {
     userToAccount.create({
         aid: account.aid,
         uid: account.createrId,
-        isDefault: false,
+        isDefault: true,
         access: 0,
     });
 });

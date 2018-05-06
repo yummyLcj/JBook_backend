@@ -38,6 +38,7 @@ module.exports = router
             return;
         }
         const accountDetail = await getAccountDetail(ctx, aid, uid);
+        console.log(accountDetail)
         ctx.goSuccess({
             data: accountDetail,
         });

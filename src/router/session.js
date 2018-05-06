@@ -6,6 +6,13 @@ const config = require('../../config');
 const router = new Router({
     prefix: '/session',
 });
+
+const sleep = function (time) {
+    return Promise((resolve) => {
+        setTimeout(() => resolve(), time);
+    });
+};
+
 module.exports = router
     // 登录
     .post('/', async (ctx, next) => {
@@ -15,6 +22,9 @@ module.exports = router
         const uid = loginInf.openid;
         await ctx.model.users.findOrCreate({
             where: {
+                uid,
+            },
+            defaults: {
                 uid,
             },
         });
