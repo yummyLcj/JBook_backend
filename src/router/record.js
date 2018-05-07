@@ -39,6 +39,9 @@ module.exports = router
             tid,
             note,
         } = ctx.getParams(['aid', 'uid', 'amount']);
+        if (!aid || !uid || !amount) {
+            return;
+        }
         const record = await ctx.model.records.create({
             rid: ctx.makeId(aid),
             aid,
