@@ -43,14 +43,16 @@ records.belongsTo(types, {
     targetKey: 'tid',
 });
 
-users.hasMany(records, {
+records.belongsTo(users, {
     foreignKey: 'createrId',
     targetKey: 'uid',
+    as: 'creater',
 });
 
-users.hasMany(records, {
+records.belongsTo(users, {
     foreignKey: 'editerId',
     targetKey: 'uid',
+    as: 'editer',
 });
 
 accounts.hasMany(records, {

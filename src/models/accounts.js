@@ -26,7 +26,7 @@ const accounts = db.defineModel('accounts', {
     },
 });
 
-users.hasMany(accounts, {
+accounts.belongsTo(users, {
     foreignKey: 'createrId',
     targetKey: 'uid',
 });

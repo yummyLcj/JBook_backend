@@ -15,6 +15,10 @@ const users = db.defineModel('users', {
         unique: true,
         primaryKey: true,
     },
+    name: {
+        type: db.STRING(16),
+        allowNull: false,
+    },
 });
 
 users.addHook('afterCreate', async (user) => {

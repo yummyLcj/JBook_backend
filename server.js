@@ -27,25 +27,30 @@ if (env === 'refreshSql') {
         .then(async () => {
             await model.users.create({
                 uid: 1,
+                name: 'lcj',
             });
-            // const account = await model.accounts.create({
-            //     aid: makeId(1),
-            //     createrId: 1,
-            //     accountName: 'test',
-            //     type: 0,
-            // });
-            // for (let i = 0; i < 10; i++) {
-            //     model.records.create({
-            //         rid: makeId(account.aid),
-            //         aid: account.aid,
-            //         createrId: 1,
-            //         editerId: 1,
-            //         balanceType: 0,
-            //         tid: 1,
-            //         amount: 0,
-            //         note: 'this is test',
-            //     });
-            // }
+            await model.users.create({
+                uid: 2,
+                name: 'lcj2',
+            });
+            const account = await model.accounts.create({
+                aid: makeId(1),
+                createrId: 1,
+                accountName: 'test',
+                type: 0,
+            });
+            for (let i = 0; i < 10; i++) {
+                model.records.create({
+                    rid: makeId(account.aid),
+                    aid: account.aid,
+                    createrId: 1,
+                    editerId: 2,
+                    balanceType: 0,
+                    tid: 1,
+                    amount: 0,
+                    note: 'this is test',
+                });
+            }
             await model.types.create({
                 tid: 1,
                 createrId: 1,

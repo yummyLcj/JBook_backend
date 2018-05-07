@@ -13,6 +13,11 @@ const getAccountDetail = async function (ctx, aid, uid) {
         order: [
             ['updatedAt', 'DESC'],
         ],
+        include: [
+            {
+                model: ctx.model.users,
+            },
+        ],
     });
     const userToAccount = await ctx.model.userToAccount.findOne({
         where: {
@@ -29,7 +34,7 @@ const getAccountDetail = async function (ctx, aid, uid) {
 
 module.exports = router
     // 获取账单具体信息
-    .get('/:aid', async (ctx, next) => {
+    .get('/:uid/:aid', async (ctx, next) => {
         const {
             aid,
             uid,

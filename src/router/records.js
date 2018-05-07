@@ -37,6 +37,12 @@ module.exports = router
             include: [
                 {
                     model: ctx.model.types,
+                }, {
+                    model: ctx.model.users,
+                    as: 'creater',
+                }, {
+                    model: ctx.model.users,
+                    as: 'editer',
                 },
             ],
         });
