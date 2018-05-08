@@ -16,16 +16,25 @@ const sleep = function (time) {
 module.exports = router
     // 登录
     .post('/', async (ctx, next) => {
-        const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${config.appid}&secret=${config.secret}&js_code=${ctx.request.body.code}&grant_type=authorization_code`;
+        const {
+            code,
+            name,
+        } = ctx.getParams(['code', 'name']);
+        if (!code || !name) {
+            return;
+        }
+        const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${config.appid}&secret=${config.secret}&js_code=${code}&grant_type=authorization_code`;
         const loginInf = await fetch(url)
             .then(res => (res.json()));
         const uid = loginInf.openid;
         await ctx.model.users.findOrCreate({
             where: {
                 uid,
+                name,
             },
             defaults: {
                 uid,
+                name,
             },
         });
         ctx.body = JSON.stringify({
