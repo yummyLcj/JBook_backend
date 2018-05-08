@@ -27,7 +27,7 @@ users.addHook('afterCreate', async (user) => {
     await accounts.create({
         aid: makeId(user.uid),
         createrId: user.uid,
-        accountName: '默认账本',
+        accountName: `${user.name}的默认账单`,
         type: 1,
     });
     await userToTypes.create({
