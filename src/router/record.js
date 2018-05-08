@@ -30,7 +30,7 @@ module.exports = router
         await next();
     })
     // 创建一条记录
-    .post('/:aid', async (ctx, next) => {
+    .post('/:uid/:aid', async (ctx, next) => {
         const {
             aid,
             uid,
