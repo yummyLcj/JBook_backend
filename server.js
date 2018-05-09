@@ -16,7 +16,7 @@ const {
     goError,
     makeId,
 } = require('./src/tools/middleware.js');
-const { types } = require('./config.js');
+const { types } = require('./dataConfig.js');
 
 const PORT = 3000;
 const app = new Koa();
