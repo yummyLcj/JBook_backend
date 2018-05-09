@@ -16,6 +16,7 @@ const {
     goError,
     makeId,
 } = require('./src/tools/middleware.js');
+const { types } = require('./config.js');
 
 const PORT = 3000;
 const app = new Koa();
@@ -28,10 +29,6 @@ if (env === 'refreshSql') {
             await model.users.create({
                 uid: 1,
                 name: 'lcj',
-            });
-            await model.users.create({
-                uid: 2,
-                name: 'lcj2',
             });
             const account = await model.accounts.create({
                 aid: makeId(1),
@@ -51,10 +48,18 @@ if (env === 'refreshSql') {
                     note: 'this is test',
                 });
             }
-            await model.types.create({
-                tid: 1,
-                createrId: 1,
-                name: 'test',
+            await types.forEach(async (item) => {
+                await model.types.create({
+                    tid: makeId(1),
+                    createrId: 1,
+                    name: item.name,
+                    type: item.type,
+                    code: item.code,
+                });
+            });
+            await model.users.create({
+                uid: 2,
+                name: 'lcj2',
             });
         });
 }

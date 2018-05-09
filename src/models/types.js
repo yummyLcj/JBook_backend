@@ -19,6 +19,14 @@ const types = db.defineModel('types', {
         type: db.STRING(16),
         unique: false,
     },
+    code: {
+        type: db.STRING,
+        unique: false,
+    },
+    type: {
+        type: db.INTEGER,
+        allowNull: false,
+    },
 });
 
 users.hasMany(types, {

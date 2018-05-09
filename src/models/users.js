@@ -24,15 +24,23 @@ const users = db.defineModel('users', {
 users.addHook('afterCreate', async (user) => {
     const accounts = require('./accounts.js');
     const userToTypes = require('./userToTypes.js');
+    const types = require('./types.js');
     await accounts.create({
         aid: makeId(user.uid),
         createrId: user.uid,
         accountName: `${user.name}的默认账单`,
         type: 1,
     });
-    await userToTypes.create({
-        tid: 1,
-        uid: user.uid,
+    const willAddTypes = await types.findAll({
+        where: {
+            createrId: 1,
+        },
+    });
+    await willAddTypes.forEach(async (type) => {
+        await userToTypes.create({
+            tid: type.tid,
+            uid: user.uid,
+        });
     });
 });
 
