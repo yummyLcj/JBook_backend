@@ -34,9 +34,9 @@ users.hasMany(types, {
     targetKey: 'uid',
 });
 
-types.addHook('afterCreate', (type) => {
+types.addHook('afterCreate', async (type) => {
     const userToTypes = require('./userToTypes.js');
-    userToTypes.create({
+    await userToTypes.create({
         uid: type.createrId,
         tid: type.tid,
     });

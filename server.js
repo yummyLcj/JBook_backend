@@ -15,6 +15,7 @@ const {
     goSuccess,
     goError,
     makeId,
+    timeMask,
 } = require('./src/tools/middleware.js');
 const { types } = require('./dataConfig.js');
 
@@ -45,6 +46,7 @@ if (env === 'refreshSql') {
                     balanceType: 0,
                     tid: 1,
                     amount: 0,
+                    time: new Date(),
                     note: 'this is test',
                 });
             }
@@ -63,6 +65,7 @@ if (env === 'refreshSql') {
             });
         });
 }
+
 app.use(koaBody({
     multipart: true,
 })).use(async (ctx, next) => {
@@ -72,6 +75,7 @@ app.use(koaBody({
     ctx.goSuccess = goSuccess.bind(ctx);
     ctx.goError = goError.bind(ctx);
     ctx.makeId = makeId;
+    ctx.timeMask = timeMask;
     await next();
 }).use(router.routes()).use(router.allowedMethods());
 app.listen(PORT);

@@ -44,13 +44,13 @@ function defineModel(name, attributes) {
         primaryKey: true,
     };
     attrs.createdAt = {
-        type: Sequelize.BIGINT,
+        type: Sequelize.DATE,
         allowNull: false,
     };
     attrs.updatedAt = {
-        type: Sequelize.BIGINT,
+        type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Date.now(),
+        defaultValue: Sequelize.NOW,
     };
     attrs.version = {
         type: Sequelize.BIGINT,
@@ -61,7 +61,7 @@ function defineModel(name, attributes) {
         timestamps: false,
         hooks: {
             beforeValidate(obj) {
-                const now = Date.now();
+                const now = new Date();
                 if (obj.isNewRecord) {
                     if (!obj.id) {
                         obj.id = generateId();
@@ -78,7 +78,7 @@ function defineModel(name, attributes) {
     });
 }
 
-const TYPES = ['STRING', 'INTEGER', 'FLOAT', 'BIGINT', 'TEXT', 'DOUBLE', 'DATEONLY', 'BOOLEAN'];
+const TYPES = ['STRING', 'INTEGER', 'FLOAT', 'BIGINT', 'TEXT', 'DOUBLE', 'DATEONLY', 'BOOLEAN', 'DATE', 'DATEONLY'];
 
 const exp = {
     defineModel,

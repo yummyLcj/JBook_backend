@@ -38,7 +38,8 @@ module.exports = router
             balanceType,
             tid,
             note,
-        } = ctx.getParams(['aid', 'uid', 'amount']);
+            time,
+        } = ctx.getParams(['aid', 'uid', 'amount', 'time']);
         if (!aid || !uid || !amount) {
             return;
         }
@@ -50,6 +51,7 @@ module.exports = router
             balanceType,
             tid,
             amount,
+            time,
             note,
         });
         ctx.goSuccess({
@@ -67,6 +69,7 @@ module.exports = router
             balanceType,
             tid,
             note,
+            time,
         } = ctx.getParams(['rid', 'uid', 'aid', 'amount']);
         ctx.model.records.update({
             aid,
@@ -75,6 +78,7 @@ module.exports = router
             tid,
             amount,
             note,
+            time,
         }, {
             where: {
                 rid,

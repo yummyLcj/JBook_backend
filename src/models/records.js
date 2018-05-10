@@ -17,6 +17,10 @@ const records = db.defineModel('records', {
         unique: true,
         primaryKey: true,
     },
+    time: {
+        type: db.DATEONLY,
+        allowNull: false,
+    },
     amount: {
         type: db.FLOAT,
         allowNull: false,

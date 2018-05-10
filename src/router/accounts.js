@@ -37,4 +37,35 @@ module.exports = router
             data: accountsList,
         });
         await next();
+    })
+    .post('/:uid/:aid', async (ctx, next) => {
+        const {
+            uid,
+            aid,
+            source,
+        } = ctx.getParams(['uid', 'aid', 'source']);
+        if (!uid || !aid || !source) {
+            return;
+        }
+        const hasSource = await ctx.model.userToAccount.findOne({
+            where: {
+                aid,
+                source,
+            },
+        });
+        if (hasSource) {
+            ctx.goError({
+                data: '一个链接仅可注册一个用户！',
+            });
+            await next();
+            return;
+        }
+        ctx.model.userToAccount.create({
+            isDefault: false,
+            access: 2,
+            source,
+            aid,
+            uid,
+        });
+        await next();
     });
