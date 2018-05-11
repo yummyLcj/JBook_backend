@@ -2,98 +2,98 @@ module.exports = {
     types: [{
         name: '生日礼金',
         type: 1,
-        code: 'icon-present',
+        code: 'present',
     }, {
         name: '投资',
         type: 1,
-        code: 'icon-honor',
+        code: 'honor',
     }, {
         name: '礼物',
         type: 1,
-        code: 'icon-gift',
+        code: 'gift',
     }, {
         name: '电费',
         type: 1,
-        code: 'icon-electry',
+        code: 'electry',
     }, {
         name: '水费',
         type: 1,
-        code: 'icon-water',
+        code: 'water',
     }, {
         name: '旅游',
         type: 1,
-        code: 'icon-screen',
+        code: 'screen',
     }, {
         name: '餐饮',
         type: 1,
-        code: 'icon-eat',
+        code: 'eat',
     }, {
         name: '唱歌',
         type: 1,
-        code: 'icon-sing',
+        code: 'sing',
     }, {
         name: '购物',
         type: 1,
-        code: 'icon-shopping',
+        code: 'shopping',
     }, {
         name: '红包',
         type: 1,
-        code: 'icon-pocket',
+        code: 'pocket',
     }, {
         name: '电影',
         type: 1,
-        code: 'icon-movie',
+        code: 'movie',
     }, {
         name: '房租',
         type: 1,
-        code: 'icon-house',
+        code: 'house',
     }, {
         name: '通讯',
         type: 1,
-        code: 'icon-tel',
+        code: 'tel',
     }, {
         name: '交通',
         type: 1,
-        code: 'icon-bus',
+        code: 'bus',
     }, {
         name: '食品饮料',
         type: 1,
-        code: 'icon-drink',
+        code: 'drink',
     }, {
         name: '日用品',
         type: 1,
-        code: 'icon-daily',
+        code: 'daily',
     }, {
         name: '医疗',
         type: 1,
-        code: 'icon-hospital',
+        code: 'hospital',
     }, {
         name: '服饰箱包',
         type: 1,
-        code: 'icon-bag',
+        code: 'bag',
     }, {
         name: '出差',
         type: 1,
-        code: 'icon-plane',
+        code: 'plane',
     }, {
         name: '食品',
         type: 1,
-        code: 'icon-food',
+        code: 'food',
     }, {
         name: '化妆品',
         type: 1,
-        code: 'icon-lip',
+        code: 'lip',
     }, {
         name: '收款',
         type: 0,
-        code: 'icon-earn',
+        code: 'earn',
     }, {
         name: '其他收入',
         type: 0,
-        code: 'icon-money',
+        code: 'money',
     }, {
         name: '工资',
         type: 0,
-        code: 'icon-fee',
+        code: 'fee',
     }],
 };

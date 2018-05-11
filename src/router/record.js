@@ -60,7 +60,7 @@ module.exports = router
         await next();
     })
     // 修改一条记录
-    .put('/:rid', async (ctx, next) => {
+    .put('/:aid/:rid', async (ctx, next) => {
         const {
             rid,
             aid,

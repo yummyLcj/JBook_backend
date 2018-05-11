@@ -1,5 +1,6 @@
 // base on /records
 const Router = require('koa-router');
+const sequelize = require('sequelize');
 
 const router = new Router({
     prefix: '/records',
@@ -10,6 +11,8 @@ module.exports = router
         const {
             aid,
             uid,
+            fromDate,
+            endDate,
         } = ctx.getParams(['aid', 'uid']);
         const {
             limit = 10,
@@ -33,6 +36,9 @@ module.exports = router
             limit: +limit,
             where: {
                 aid,
+                time: {
+                    [sequelize.Op.between]: [fromDate, endDate],
+                },
             },
             include: [
                 {
@@ -45,7 +51,7 @@ module.exports = router
                     as: 'editer',
                 },
             ],
-            order: ['records.time DESC'],
+            order: ['time'],
         });
         ctx.goSuccess({
             data: {

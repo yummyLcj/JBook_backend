@@ -7,12 +7,6 @@ const router = new Router({
     prefix: '/session',
 });
 
-const sleep = function (time) {
-    return Promise((resolve) => {
-        setTimeout(() => resolve(), time);
-    });
-};
-
 module.exports = router
     // 登录
     .post('/', async (ctx, next) => {
@@ -39,6 +33,7 @@ module.exports = router
         });
         ctx.body = JSON.stringify({
             uid,
+            name,
         });
         await next();
     });

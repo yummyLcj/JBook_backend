@@ -3,7 +3,7 @@ const schedule = require('node-schedule');
 const isFieldNotExist = function (data = [], mustExistField = []) {
     const emptyKey = [];
     mustExistField.forEach((field) => {
-        if (!data[field]) {
+        if (data[field] === undefined) {
             emptyKey.push(field);
         }
     });

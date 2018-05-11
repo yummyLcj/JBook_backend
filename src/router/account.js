@@ -1,32 +1,57 @@
 // base on /account
 const Router = require('koa-router');
+const sequelize = require('sequelize');
 
 const router = new Router({
     prefix: '/account',
 });
 
-const getAccountDetail = async function (ctx, aid, uid) {
+const getAccountDetail = async function (ctx, aid, uid, fromDate, endDate) {
+    const where = aid.toString() !== '0' ? {
+        aid,
+        uid,
+    } : {
+        uid,
+        isDefault: true,
+    };
+    const userToAccount = await ctx.model.userToAccount.findOne({
+        where,
+        order: [
+            ['createdAt', 'DESC'],
+        ],
+    });
     const accountDetail = await ctx.model.accounts.findOne({
         where: {
-            aid,
+            aid: userToAccount.aid,
         },
-        order: [
-            ['updatedAt', 'DESC'],
-        ],
         include: [
             {
                 model: ctx.model.users,
             },
         ],
     });
-    const userToAccount = await ctx.model.userToAccount.findOne({
+    const income = await ctx.model.records.sum('amount', {
         where: {
-            aid,
-            uid,
+            aid: userToAccount.aid,
+            balanceType: 0,
+            time: {
+                [sequelize.Op.between]: [fromDate, endDate],
+            },
+        },
+    });
+    const outcome = await ctx.model.records.sum('amount', {
+        where: {
+            aid: userToAccount.aid,
+            balanceType: 1,
+            time: {
+                [sequelize.Op.between]: [fromDate, endDate],
+            },
         },
     });
     accountDetail.dataValues.isDefault = userToAccount.isDefault;
     accountDetail.dataValues.access = userToAccount.access;
+    accountDetail.dataValues.income = income || 0;
+    accountDetail.dataValues.outcome = outcome || 0;
     accountDetail.isDefault = userToAccount.isDefault;
     accountDetail.access = userToAccount.access;
     return accountDetail;
@@ -38,12 +63,13 @@ module.exports = router
         const {
             aid,
             uid,
+            fromDate,
+            endDate,
         } = ctx.getParams(['aid', 'uid']);
         if (!aid || !uid) {
             return;
         }
-        const accountDetail = await getAccountDetail(ctx, aid, uid);
-        console.log(accountDetail)
+        const accountDetail = await getAccountDetail(ctx, aid, uid, fromDate, endDate);
         ctx.goSuccess({
             data: accountDetail,
         });

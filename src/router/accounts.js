@@ -1,5 +1,6 @@
 // base on /accounts
 const Router = require('koa-router');
+const sequelize = require('sequelize');
 
 const router = new Router({
     prefix: '/accounts',
@@ -10,6 +11,15 @@ module.exports = router
     .get('/:uid', async (ctx, next) => {
         const { uid } = ctx.getParams(['uid']);
         const accountsList = await ctx.model.userToAccount.findAll({
+            // attributes: {
+            //     include:
+            //     [
+            //         [
+            //             sequelize.fn('COUNT', sequelize.col('uid')),
+            //             'memberCount',
+            //         ],
+            //     ],
+            // },
             where: {
                 uid,
             },
