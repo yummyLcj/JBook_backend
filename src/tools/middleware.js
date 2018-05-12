@@ -1,4 +1,4 @@
-const schedule = require('node-schedule');
+// const schedule = require('node-schedule');
 
 const isFieldNotExist = function (data = [], mustExistField = []) {
     const emptyKey = [];
@@ -38,7 +38,7 @@ const goError = function (content = {}) {
 
 // 定时任务
 const timeMask = function (cb = () => false, sec = '*', min = '*', hour = '*', day = '*', month = '*', year = '*', week = '*') {
-    schedule.scheduleJob(`${sec} ${min} ${hour} ${day} ${month} ${year} ${week}`, cb);
+    // schedule.scheduleJob(`${sec} ${min} ${hour} ${day} ${month} ${year} ${week}`, cb);
 };
 
 // 获取传递的参数
