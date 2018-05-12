@@ -2,6 +2,7 @@
 const Router = require('koa-router');
 const sequelize = require('sequelize');
 
+const Op = sequelize.Op;
 const router = new Router({
     prefix: '/accounts',
 });
@@ -11,15 +12,6 @@ module.exports = router
     .get('/:uid', async (ctx, next) => {
         const { uid } = ctx.getParams(['uid']);
         const accountsList = await ctx.model.userToAccount.findAll({
-            // attributes: {
-            //     include:
-            //     [
-            //         [
-            //             sequelize.fn('COUNT', sequelize.col('uid')),
-            //             'memberCount',
-            //         ],
-            //     ],
-            // },
             where: {
                 uid,
             },
@@ -43,8 +35,39 @@ module.exports = router
             });
             accountsList.push(account);
         }
+        const aids = accountsList.map(account => account.aid);
+        const memberCount = {};
+        const recordCount = {};
+        await ctx.model.userToAccount.count({
+            group: 'aid',
+            attributes: ['aid'],
+            where: {
+                aid: {
+                    [Op.or]: aids,
+                },
+            },
+        }).then((res) => {
+            res.forEach((count) => {
+                memberCount[count.aid] = count.count;
+            });
+        });
+        await ctx.model.records.count({
+            group: 'aid',
+            attributes: ['aid'],
+            where: {
+                aid: {
+                    [Op.or]: aids,
+                },
+            },
+        }).then((res) => {
+            res.forEach((count) => {
+                recordCount[count.aid] = count.count;
+            });
+        });
         ctx.goSuccess({
             data: accountsList,
+            memberCount,
+            recordCount,
         });
         await next();
     })
