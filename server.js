@@ -30,6 +30,7 @@ if (env === 'refreshSql') {
             await model.users.create({
                 uid: 1,
                 name: 'lcj',
+                avatar: 'lcj',
             });
             const account = await model.accounts.create({
                 aid: makeId(1),
@@ -62,6 +63,7 @@ if (env === 'refreshSql') {
             await model.users.create({
                 uid: 2,
                 name: 'lcj2',
+                avatar: 'lcj',
             });
         });
 }

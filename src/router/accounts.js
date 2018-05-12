@@ -1,13 +1,34 @@
 // base on /accounts
 const Router = require('koa-router');
-const sequelize = require('sequelize');
 
-const Op = sequelize.Op;
 const router = new Router({
     prefix: '/accounts',
 });
 
 module.exports = router
+    .get('/users/:aid', async (ctx, next) => {
+        const {
+            aid,
+            uid,
+        } = ctx.getParams(['uid', 'aid']);
+        if (!aid || !uid) {
+            return;
+        }
+        const users = await ctx.model.userToAccount.findAll({
+            where: {
+                aid,
+            },
+            include: [
+                {
+                    model: ctx.model.users,
+                },
+            ],
+        });
+        ctx.goSuccess({
+            data: users,
+        });
+        await next();
+    })
     // 获取全部账单列表，没有则创建默认账单，取全部账单
     .get('/:uid', async (ctx, next) => {
         const { uid } = ctx.getParams(['uid']);
@@ -81,6 +102,7 @@ module.exports = router
         }
         const querys = source.split(',');
         const aid = querys[1];
+        const access = querys[2]
         const hasSource = await ctx.model.userToAccount.findOne({
             where: {
                 source,
@@ -102,15 +124,14 @@ module.exports = router
         if (!hasIn) {
             await ctx.model.userToAccount.create({
                 isDefault: false,
-                access: 2,
+                access,
                 source,
                 uid,
                 aid,
             });
         } else {
             await ctx.model.userToAccount.update({
-                isDefault: false,
-                access: 1,
+                access,
                 source,
             }, {
                 where: {

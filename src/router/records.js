@@ -53,6 +53,7 @@ module.exports = router
             ],
             order: [
                 ['time', 'DESC'],
+                ['updatedAt', 'DESC'],
             ],
         });
         ctx.goSuccess({

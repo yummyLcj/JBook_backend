@@ -33,7 +33,7 @@ userToAccount.belongsTo(accounts, {
     targetKey: 'aid',
 });
 
-users.hasMany(userToAccount, {
+userToAccount.belongsTo(users, {
     foreignKey: 'uid',
     targetKey: 'uid',
 });

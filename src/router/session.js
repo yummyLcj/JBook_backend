@@ -13,8 +13,9 @@ module.exports = router
         const {
             code,
             name,
-        } = ctx.getParams(['code', 'name']);
-        if (!code || !name) {
+            avatar,
+        } = ctx.getParams(['code', 'name', 'avatar']);
+        if (!code || !name || !avatar) {
             return;
         }
         const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${config.appid}&secret=${config.secret}&js_code=${code}&grant_type=authorization_code`;
@@ -25,10 +26,12 @@ module.exports = router
             where: {
                 uid,
                 name,
+                avatar,
             },
             defaults: {
                 uid,
                 name,
+                avatar,
             },
         });
         ctx.body = JSON.stringify({

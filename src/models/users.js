@@ -19,6 +19,10 @@ const users = db.defineModel('users', {
         type: db.STRING(16),
         allowNull: false,
     },
+    avatar: {
+        type: db.STRING,
+        allowNull: false,
+    },
 });
 
 users.addHook('afterCreate', async (user) => {
