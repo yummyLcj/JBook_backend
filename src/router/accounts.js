@@ -71,18 +71,18 @@ module.exports = router
         });
         await next();
     })
-    .post('/:uid/:aid', async (ctx, next) => {
+    .post('/:uid', async (ctx, next) => {
         const {
             uid,
-            aid,
             source,
-        } = ctx.getParams(['uid', 'aid', 'source']);
-        if (!uid || !aid || !source) {
+        } = ctx.getParams(['uid', 'source']);
+        if (!uid || !source) {
             return;
         }
+        const querys = source.split(',');
+        const aid = querys[1];
         const hasSource = await ctx.model.userToAccount.findOne({
             where: {
-                aid,
                 source,
             },
         });
@@ -93,12 +93,36 @@ module.exports = router
             await next();
             return;
         }
-        ctx.model.userToAccount.create({
-            isDefault: false,
-            access: 2,
-            source,
-            aid,
-            uid,
+        const hasIn = ctx.model.userToAccount.findOne({
+            where: {
+                aid,
+                uid,
+            },
+        });
+        if (!hasIn) {
+            await ctx.model.userToAccount.create({
+                isDefault: false,
+                access: 2,
+                source,
+                uid,
+                aid,
+            });
+        } else {
+            await ctx.model.userToAccount.update({
+                isDefault: false,
+                access: 1,
+                source,
+            }, {
+                where: {
+                    uid,
+                    aid,
+                },
+            });
+        }
+        ctx.goSuccess({
+            data: {
+                aid,
+            },
         });
         await next();
     });

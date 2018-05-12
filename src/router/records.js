@@ -51,7 +51,9 @@ module.exports = router
                     as: 'editer',
                 },
             ],
-            order: ['time'],
+            order: [
+                ['time', 'DESC'],
+            ],
         });
         ctx.goSuccess({
             data: {
