@@ -14,27 +14,34 @@ module.exports = router
             code,
             name,
             avatar,
-        } = ctx.getParams(['code', 'name', 'avatar']);
-        if (!code || !name || !avatar) {
+        } = ctx.getParams(['code']);
+        if (!code) {
+            await next();
             return;
         }
         const url = `https://api.weixin.qq.com/sns/jscode2session?appid=${config.appid}&secret=${config.secret}&js_code=${code}&grant_type=authorization_code`;
         const loginInf = await fetch(url)
             .then(res => (res.json()));
         const uid = loginInf.openid;
-        await ctx.model.users.findOrCreate({
+        const hasUser = await ctx.model.users.findOne({
             where: {
                 uid,
-                name,
-                avatar,
             },
-            defaults: {
+        });
+        if (!hasUser && (!name || !avatar)) {
+            ctx.goError({
+                data: '未注册!',
+            });
+            await next();
+            return;
+        } else if (name && avatar) {
+            await ctx.model.users.create({
                 uid,
                 name,
                 avatar,
-            },
-        });
-        ctx.body = JSON.stringify({
+            });
+        }
+        ctx.goSuccess({
             uid,
             name,
         });
