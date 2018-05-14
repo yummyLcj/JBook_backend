@@ -23,7 +23,7 @@ module.exports = router
         const loginInf = await fetch(url)
             .then(res => (res.json()));
         const uid = loginInf.openid;
-        const hasUser = await ctx.model.users.findOne({
+        let hasUser = await ctx.model.users.findOne({
             where: {
                 uid,
             },
@@ -35,7 +35,7 @@ module.exports = router
             await next();
             return;
         } else if (name && avatar) {
-            await ctx.model.users.create({
+            hasUser = await ctx.model.users.create({
                 uid,
                 name,
                 avatar,
@@ -43,7 +43,10 @@ module.exports = router
         }
         ctx.goSuccess({
             uid,
-            name,
+            userInfo: {
+                name: hasUser.name,
+                avatar: hasUser.avatar,
+            },
         });
         await next();
     });
