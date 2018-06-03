@@ -22,9 +22,9 @@ module.exports = router
                 aid,
             },
         });
-        const fileName = `./src/userAccounts/aid${+new Date() * Math.random()}.json`;
+        const fileName = `./static/aid${Math.floor(+new Date() * Math.random())}.json`;
         fs.writeFileSync(fileName, JSON.stringify(records));
-        const file = fs.readFileSync(fileName);
-        ctx.body = file;
+        const pathName = `http://localhost:3000${fileName.replace('./static', '')}`;
+        ctx.body = pathName;
         await next();
     });

@@ -7,6 +7,7 @@
  */
 const Koa = require('koa');
 const koaBody = require('koa-body');
+const serve = require('koa-static');
 const router = require('./src/router.js');
 const model = require('./src/model.js');
 const {
@@ -67,19 +68,23 @@ if (env === 'refreshSql') {
             });
         });
 }
-
-app.use(koaBody({
-    multipart: true,
-})).use(async (ctx, next) => {
-    ctx.model = model;
-    ctx.getParams = getParams.bind(ctx);
-    ctx.go = go.bind(ctx);
-    ctx.goSuccess = goSuccess.bind(ctx);
-    ctx.goError = goError.bind(ctx);
-    ctx.makeId = makeId;
-    // ctx.timeMask = timeMask;
-    await next();
-}).use(router.routes()).use(router.allowedMethods());
+app
+    .use(koaBody({
+        multipart: true,
+    }))
+    .use(serve('./static'))
+    .use(async (ctx, next) => {
+        ctx.model = model;
+        ctx.getParams = getParams.bind(ctx);
+        ctx.go = go.bind(ctx);
+        ctx.goSuccess = goSuccess.bind(ctx);
+        ctx.goError = goError.bind(ctx);
+        ctx.makeId = makeId;
+        // ctx.timeMask = timeMask;
+        await next();
+    })
+    .use(router.routes())
+    .use(router.allowedMethods());
 app.listen(PORT);
 
 console.log(`Server is listen on Port ${PORT}`);
