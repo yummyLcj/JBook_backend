@@ -33,7 +33,7 @@ users.addHook('afterCreate', async (user) => {
         aid: makeId(user.uid),
         createrId: user.uid,
         accountName: `${user.name}的默认账单`,
-        type: 1,
+        type: 0,
     });
     const willAddTypes = await types.findAll({
         where: {
