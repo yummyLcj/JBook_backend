@@ -23,7 +23,7 @@ module.exports = router
         const loginInf = await fetch(url)
             .then(res => (res.json()));
         const uid = loginInf.openid;
-        if (!uid) {
+        if (uid.errcode) {
             ctx.goError({
                 data: `uid不存在！${JSON.stringify(loginInf)}`,
             });
