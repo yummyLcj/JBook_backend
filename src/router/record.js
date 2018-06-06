@@ -1,9 +1,11 @@
 // base on /account
 const Router = require('koa-router');
+// const sequelize = require('sequelize');
 
 const router = new Router({
     prefix: '/record',
 });
+// const Op = sequelize.Op;
 module.exports = router
     // 获取记录具体信息
     .get('/:rid', async (ctx, next) => {
@@ -114,17 +116,25 @@ module.exports = router
                 rid,
             },
         });
-        await uids.forEach((_uid) => {
-            ctx.model.userToRecord.upsert({
+        const hadExistUids = await ctx.model.userToRecord.findAll({
+            where: {
                 rid,
-                uid,
-            }, {
-                rid,
-                uid: _uid,
-            }, {
+            },
+        }).then(res => res.map(user => user.dataValues.uid));
+        const deleteUids = hadExistUids.filter(hadUid => uids.indexOf(hadUid) === -1);
+        const addUids = uids.filter(addUid => hadExistUids.indexOf(addUid) === -1);
+        await deleteUids.forEach((_uid) => {
+            ctx.model.userToRecord.destroy({
                 where: {
                     rid,
+                    uid: _uid,
                 },
+            });
+        });
+        await addUids.forEach((_uid) => {
+            ctx.model.userToRecord.create({
+                rid,
+                uid: _uid,
             });
         });
         ctx.goSuccess({

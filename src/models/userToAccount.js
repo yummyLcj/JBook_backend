@@ -16,6 +16,11 @@ const userToAccount = db.defineModel('userToAccount', {
         allowNull: false,
         defaultValue: false,
     },
+    isDelete: {
+        type: db.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
     // 0 - 拥有者 1 - 管理员 2 - 可写 3 - 可读
     access: {
         type: db.INTEGER,

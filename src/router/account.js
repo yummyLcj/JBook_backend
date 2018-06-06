@@ -159,11 +159,12 @@ module.exports = router
             await next();
             return;
         }
-        await ctx.model.accounts.update({
+        await ctx.model.userToAccount.update({
             isDelete: true,
         }, {
             where: {
                 aid,
+                uid,
             },
         });
         ctx.goSuccess({

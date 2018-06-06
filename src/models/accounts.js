@@ -24,11 +24,6 @@ const accounts = db.defineModel('accounts', {
         type: db.FLOAT,
         allowNull: true,
     },
-    isDelete: {
-        type: db.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-    },
 });
 
 accounts.belongsTo(users, {
