@@ -38,6 +38,7 @@ module.exports = router
         const accountsList = await ctx.model.userToAccount.findAll({
             where: {
                 uid,
+                isDelete: false,
             },
             include: [
                 {

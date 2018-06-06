@@ -159,15 +159,11 @@ module.exports = router
             await next();
             return;
         }
-        await ctx.model.accounts.destroy({
+        await ctx.model.accounts.update({
+            isDelete: true,
+        }, {
             where: {
-                id: aid,
-            },
-        });
-        await ctx.model.userToAccount.destroy({
-            where: {
-                uid,
-                id: aid,
+                aid,
             },
         });
         ctx.goSuccess({

@@ -40,6 +40,11 @@ const records = db.defineModel('records', {
         allowNull: true,
         defaultValue: '',
     },
+    isDelete: {
+        type: db.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
 });
 
 records.belongsTo(types, {

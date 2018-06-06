@@ -22,6 +22,7 @@ module.exports = router
             where: {
                 uid,
                 aid,
+                isDelete: false,
             },
         });
         if (!canWrite) {

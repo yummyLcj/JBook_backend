@@ -142,9 +142,11 @@ module.exports = router
             await next();
             return;
         }
-        ctx.model.records.destroy({
+        ctx.model.records.update({
+            isDelete: true,
+        }, {
             where: {
-                id: rid,
+                rid,
                 aid,
             },
         });
