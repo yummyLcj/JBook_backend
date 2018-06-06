@@ -2,7 +2,7 @@
 const Router = require('koa-router');
 const sequelize = require('sequelize');
 
-const Op = sequelize.Op;
+const Op = { sequelize };
 const router = new Router({
     prefix: '/accounts',
 });

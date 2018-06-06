@@ -8,7 +8,11 @@ module.exports = router
     // 获取记录具体信息
     .get('/:rid', async (ctx, next) => {
         const { rid } = ctx.getParams(['rid']);
-        const accountsList = await ctx.model.records.findAll({
+        if (!rid) {
+            await next();
+            return;
+        }
+        const record = await ctx.model.records.findAll({
             where: {
                 rid,
             },
@@ -24,8 +28,19 @@ module.exports = router
                 },
             ],
         });
+        const users = await ctx.model.userToRecord.findAll({
+            where: {
+                rid,
+            },
+            include: [
+                {
+                    model: ctx.model.users,
+                },
+            ],
+        });
         ctx.goSuccess({
-            data: accountsList,
+            data: record,
+            users,
         });
         await next();
     })
@@ -40,9 +55,12 @@ module.exports = router
             note,
             time,
         } = ctx.getParams(['aid', 'uid', 'amount', 'time']);
-        if (!aid || !uid || !amount) {
+        if (!aid || !uid || !amount || !time) {
+            await next();
             return;
         }
+        let { uids } = ctx.getParams();
+        uids = uids || [uid];
         const record = await ctx.model.records.create({
             rid: ctx.makeId(aid),
             aid,
@@ -53,6 +71,12 @@ module.exports = router
             amount,
             time,
             note,
+        });
+        await uids.forEach((_uid) => {
+            ctx.model.userToRecord.create({
+                rid: record.dataValues.rid,
+                uid: _uid,
+            });
         });
         ctx.goSuccess({
             data: record,
@@ -71,7 +95,13 @@ module.exports = router
             note,
             time,
         } = ctx.getParams(['rid', 'uid', 'aid', 'amount']);
-        ctx.model.records.update({
+        if (!aid || !uid || !amount || !time) {
+            await next();
+            return;
+        }
+        let { uids } = ctx.getParams();
+        uids = uids || [uid];
+        await ctx.model.records.update({
             aid,
             editerId: uid,
             balanceType,
@@ -84,6 +114,19 @@ module.exports = router
                 rid,
             },
         });
+        await uids.forEach((_uid) => {
+            ctx.model.userToRecord.upsert({
+                rid,
+                uid,
+            }, {
+                rid,
+                uid: _uid,
+            }, {
+                where: {
+                    rid,
+                },
+            });
+        });
         ctx.goSuccess({
             data: 'success',
         });
@@ -95,6 +138,10 @@ module.exports = router
             rid,
             aid,
         } = ctx.getParams(['rid', 'aid']);
+        if (!aid || !rid) {
+            await next();
+            return;
+        }
         ctx.model.records.destroy({
             where: {
                 id: rid,

@@ -27,4 +27,26 @@ module.exports = router
         const pathName = `http://localhost:3000${fileName.replace('./static', '')}`;
         ctx.body = pathName;
         await next();
+    })
+    .post('/:aid', async (ctx, next) => {
+        const {
+            aid,
+            datas,
+        } = ctx.getParams(['aid', 'datas']);
+        if (!aid || !datas) {
+            await next();
+            return;
+        }
+        await datas.forEach((data) => {
+            ctx.model.records.upsert(data, {
+                fields: Object.keys(data),
+                where: {
+                    rid: data.rid,
+                },
+            });
+        });
+        ctx.goSuccess({
+            body: true,
+        });
+        await next();
     });

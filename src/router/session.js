@@ -49,4 +49,44 @@ module.exports = router
             },
         });
         await next();
+    })
+    .get('/account', async (ctx, next) => {
+        const {
+            aid,
+            rid,
+        } = ctx.getParams();
+        if (!aid && !rid) {
+            ctx.goError({
+                message: '参数缺失!',
+            });
+            return;
+        }
+        let users;
+        if (rid) {
+            users = await ctx.model.userToRecord.findAll({
+                where: {
+                    rid,
+                },
+                include: [
+                    {
+                        model: ctx.model.users,
+                    },
+                ],
+            });
+        } else {
+            users = await ctx.model.userToAccount.findAll({
+                where: {
+                    aid,
+                },
+                include: [
+                    {
+                        model: ctx.model.users,
+                    },
+                ],
+            });
+        }
+        ctx.goSuccess({
+            users,
+        });
+        await next();
     });
