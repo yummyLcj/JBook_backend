@@ -56,6 +56,8 @@ module.exports = router
             tid,
             note,
             time,
+            circleTime = '',
+            circleType = '',
         } = ctx.getParams(['aid', 'uid', 'amount', 'time']);
         if (!aid || !uid || !amount || !time) {
             await next();
@@ -73,6 +75,8 @@ module.exports = router
             amount,
             time,
             note,
+            circleTime,
+            circleType,
         });
         await uids.forEach((_uid) => {
             ctx.model.userToRecord.create({
@@ -96,6 +100,8 @@ module.exports = router
             tid,
             note,
             time,
+            circleTime = '',
+            circleType = '',
         } = ctx.getParams(['rid', 'uid', 'aid', 'amount']);
         if (!aid || !uid || !amount || !time) {
             await next();
@@ -111,6 +117,8 @@ module.exports = router
             amount,
             note,
             time,
+            circleTime,
+            circleType,
         }, {
             where: {
                 rid,

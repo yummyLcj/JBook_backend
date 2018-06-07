@@ -1,5 +1,3 @@
-// const schedule = require('node-schedule');
-
 const isFieldNotExist = function (data = [], mustExistField = []) {
     const emptyKey = [];
     mustExistField.forEach((field) => {
@@ -36,9 +34,51 @@ const goError = function (content = {}) {
     return true;
 };
 
+const dayMask = function (days, cb) {
+    const time = days * 86400000;
+    setTimeout(() => {
+        cb();
+    }, time);
+};
+
+const monthMask = function (months, cb) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const day = now.getDate();
+    const time = new Date(year, month + months, day, 0, 0, 0) - now;
+    setTimeout(() => {
+        monthMask(months, cb);
+        cb();
+    }, time);
+};
+
+const yearMask = function (years, cb) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const day = now.getDate();
+    const time = new Date(year + years, month, day, 0, 0, 0) - now;
+    setTimeout(() => {
+        monthMask(years, cb);
+        cb();
+    }, time);
+};
+
 // 定时任务
-const timeMask = function (cb = () => false, sec = '*', min = '*', hour = '*', day = '*', month = '*', year = '*', week = '*') {
-    // schedule.scheduleJob(`${sec} ${min} ${hour} ${day} ${month} ${year} ${week}`, cb);
+const timeMask = function (type, time, cb) {
+    switch (type.toStirng()) {
+    case '0':
+        yearMask(time, cb);
+        break;
+    case '1':
+        monthMask(time, cb);
+        break;
+    case '2':
+        dayMask(time, cb);
+        break;
+    default:
+    }
 };
 
 // 获取传递的参数

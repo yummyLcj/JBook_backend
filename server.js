@@ -16,7 +16,7 @@ const {
     goSuccess,
     goError,
     makeId,
-    // timeMask,
+    timeMask,
 } = require('./src/tools/middleware.js');
 const { types } = require('./dataConfig.js');
 
@@ -80,7 +80,7 @@ app
         ctx.goSuccess = goSuccess.bind(ctx);
         ctx.goError = goError.bind(ctx);
         ctx.makeId = makeId;
-        // ctx.timeMask = timeMask;
+        ctx.timeMask = timeMask;
         await next();
     })
     .use(router.routes())

@@ -45,6 +45,16 @@ const records = db.defineModel('records', {
         allowNull: false,
         defaultValue: false,
     },
+    circleTime: {
+        type: db.STRING(16),
+        allowNull: false,
+        defaultValue: '',
+    },
+    circleType: {
+        type: db.STRING(16),
+        allowNull: false,
+        defaultValue: '',
+    },
 });
 
 records.belongsTo(types, {
