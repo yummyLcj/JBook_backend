@@ -8,6 +8,10 @@ module.exports = router
     // 获取记录具体信息
     .get('/:tid', async (ctx, next) => {
         const { tid } = ctx.getParams(['tid']);
+        if (!tid) {
+            await next();
+            return;
+        }
         const typeList = await ctx.model.types.findAll({
             where: {
                 tid,
@@ -23,10 +27,18 @@ module.exports = router
         const {
             name,
             uid,
-        } = ctx.getParams(['name', 'uid']);
+            code,
+            type,
+        } = ctx.getParams(['name', 'uid', 'code', 'type']);
+        if (!name || !uid || !code || type === undefined) {
+            await next();
+            return;
+        }
         await ctx.model.types.create({
             tid: ctx.makeId(uid),
-            createId: uid,
+            createrId: uid,
+            code,
+            type,
             name,
         });
         ctx.goSuccess({
@@ -34,18 +46,23 @@ module.exports = router
         });
         await next();
     })
-    // 获取记录具体信息
+    // 修改记录具体信息
     .put('/:tid', async (ctx, next) => {
-        const { tid, name } = ctx.getParams(['tid', 'name']);
+        const {
+            tid,
+            name,
+            code,
+        } = ctx.getParams(['tid', 'name', 'code']);
         const typeList = await ctx.model.types.update({
             name,
+            code,
         }, {
             where: {
                 tid,
             },
         });
         ctx.goSuccess({
-            data: 'success',
+            data: typeList,
         });
         await next();
     })
