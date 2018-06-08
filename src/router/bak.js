@@ -7,7 +7,7 @@ const { Op } = sequelize;
 const router = new Router({
     prefix: '/bak',
 });
-
+const urlheader = 'https://ss.ylittle.com';
 module.exports = router
     .get('/:aid', async (ctx, next) => {
         const {
@@ -24,19 +24,24 @@ module.exports = router
         });
         const fileName = `./static/aid${Math.floor(+new Date() * Math.random())}.json`;
         fs.writeFileSync(fileName, JSON.stringify(records));
-        const pathName = `http://localhost:3000${fileName.replace('./static', '')}`;
+        const pathName = `${urlheader}${fileName.replace('./static', '')}`;
         ctx.body = pathName;
         await next();
     })
     .post('/:aid', async (ctx, next) => {
         const {
             aid,
-            datas,
-        } = ctx.getParams(['aid', 'datas']);
-        if (!aid || !datas) {
+            url,
+        } = ctx.getParams(['aid', 'url']);
+        if (!aid || !url) {
             await next();
             return;
         }
+        const filepath = url.replace(urlheader, '');
+        let datas = fs.readFileSync(`./static${filepath}`, {
+            encoding: 'utf8',
+        });
+        datas = JSON.parse(datas);
         await datas.forEach((data) => {
             ctx.model.records.upsert(data, {
                 fields: Object.keys(data),
