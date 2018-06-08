@@ -30,10 +30,10 @@ if (env === 'refreshSql') {
     model
         .sync()
         .then(async () => {
-            await types.forEach(async (item, index) => {
+            await types.forEach(async (item) => {
                 await model.types.create({
-                    tid: index,
-                    createrId: item.tid,
+                    tid: item.tid,
+                    createrId: 1,
                     name: item.name,
                     type: item.type,
                     code: item.code,
