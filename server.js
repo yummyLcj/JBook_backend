@@ -25,46 +25,66 @@ const app = new Koa();
 const env = process.env.NODE_ENV;
 if (env === 'refreshSql') {
     // 更新数据库，正式环境删除
+    const id = 'oOgQI0TT8IPdT-R4Kl2hEO3T7XB4';
+    const otherUserAvatar = 'https://wx.qlogo.cn/mmopen/vi_32/ZG0tmpOI1yiaAcWqND0lRFdDRic3NWKjI5lMmSs5DDuNzibcGmqMibLlyMq8ibsgtyoJB5Qz8D6Bbsh5fcHOcCM51qQ/132';
     model
         .sync()
         .then(async () => {
-            await model.users.create({
-                uid: 1,
-                name: 'lcj',
-                avatar: 'lcj',
-            });
-            const account = await model.accounts.create({
-                aid: makeId(1),
-                createrId: 1,
-                accountName: 'test',
-                type: 0,
-            });
-            for (let i = 0; i < 10; i++) {
-                model.records.create({
-                    rid: makeId(account.aid),
-                    aid: account.aid,
-                    createrId: 1,
-                    editerId: 2,
-                    balanceType: 0,
-                    tid: 1,
-                    amount: 0,
-                    time: new Date(),
-                    note: 'this is test',
-                });
-            }
-            await types.forEach(async (item) => {
+            await types.forEach(async (item, index) => {
                 await model.types.create({
-                    tid: makeId(1),
-                    createrId: 1,
+                    tid: index,
+                    createrId: item.tid,
                     name: item.name,
                     type: item.type,
                     code: item.code,
                 });
             });
             await model.users.create({
+                uid: id,
+                name: '陆晨杰',
+                avatar: 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKr8HtokcNroNeJmdrFEggCkskA7O63AU4hEibaiauKlGH7ichIRgJ5Mibu0HJNuQ3DxMZ9DefLqCpT0Q/132',
+            });
+            const account = await model.accounts.create({
+                aid: makeId(id),
+                createrId: id,
+                accountName: '陆晨杰的测试账本',
+                type: 0,
+            });
+            const inTypes = types.filter(type => type.type === 0);
+            const outTypes = types.filter(type => type.type === 1);
+            const random = function (from, to) {
+                return (Math.random() * (to - from)) + from;
+            };
+            const randomType = function (balanceType) {
+                const type = [inTypes, outTypes][balanceType];
+                return type[Math.floor(random(0, type.length - 1))].tid;
+            };
+            // 2018年12个月每个月200条数据
+            for (let i = 0; i < 12; i++) {
+                for (let j = 0; j < 200; j++) {
+                    const balanceType = Math.floor(Math.random() * 10) % 2 === 0 ? 1 : 0;
+                    model.records.create({
+                        rid: makeId(account.aid),
+                        aid: account.aid,
+                        createrId: id,
+                        editerId: id,
+                        balanceType,
+                        tid: randomType(balanceType),
+                        amount: random(0, 1000).toFixed(2),
+                        time: new Date(2018, i, Math.floor(random(1, 29))),
+                        note: '',
+                    });
+                }
+            }
+            await model.users.create({
+                uid: 1,
+                name: '测试用户1',
+                avatar: otherUserAvatar,
+            });
+            await model.users.create({
                 uid: 2,
-                name: 'lcj2',
-                avatar: 'lcj',
+                name: '测试用户2',
+                avatar: otherUserAvatar,
             });
         });
 }
