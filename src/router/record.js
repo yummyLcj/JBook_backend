@@ -65,6 +65,7 @@ module.exports = router
         }
         let { uids } = ctx.getParams();
         uids = uids || [uid];
+        console.log(circleTime, circleType);
         const record = await ctx.model.records.create({
             rid: ctx.makeId(aid),
             aid,
@@ -73,7 +74,7 @@ module.exports = router
             balanceType,
             tid,
             amount,
-            time,
+            time: new Date(time),
             note,
             circleTime,
             circleType,
