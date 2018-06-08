@@ -120,7 +120,7 @@ module.exports = router
             await next();
             return;
         }
-        const hasIn = ctx.model.userToAccount.findOne({
+        const hasIn = await ctx.model.userToAccount.findOne({
             where: {
                 aid,
                 uid,
